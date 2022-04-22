@@ -13,6 +13,9 @@ node_modules
 
 build/config.gypi
 
+###### DOCKER ######
+.env
+
 ####### OSX ########
 .DS_Store
 .AppleDouble
