@@ -5,7 +5,7 @@ volumes:
 services:
   corpora-node:
     restart: ${RESTART_POLICY}
-    image: scpomedialab/atelierdeschercheurs-corpora
+    image: scpomedialab/atelierdeschercheurs-corpora:latest
     build: .
     ports:
       - "${PORT}:8080"
