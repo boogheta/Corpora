@@ -3,7 +3,7 @@
 # ==================================================== #
 # == Build client ==
 # ==================================================== #
-FROM node:16.13.0 AS build-client
+FROM node:16.13.0-slim AS build-client
 RUN apt-get update && \
     apt-get install -y apt-utils && \
     apt-get install -y python2.7 git-core ca-certificates wget file fftw-dev sudo && \
@@ -20,10 +20,10 @@ RUN npm run build --unsafe-perm=true
 # ==================================================== #
 # == Server ==
 # ==================================================== #
-FROM node:16.13.0
+FROM node:16.13.0-slim
 RUN apt-get update && \
     apt-get install -y apt-utils && \
-    apt-get install -y python2.7 git-core ca-certificates wget file fftw-dev sudo curl libx11-xcb1 libxcomposite1 libxi6 libxext6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libasound2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libdrm2 libdrm-dev libgbm1 libgbm-dev libice6 libsm6 && \
+    apt-get install -y make gcc g++ python2.7 git-core ca-certificates wget file fftw-dev sudo curl libx11-xcb1 libxcomposite1 libxi6 libxext6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libasound2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libdrm2 libdrm-dev libgbm1 libgbm-dev libice6 libsm6 && \
     update-ca-certificates
 
 # Setup proper time for timezone
@@ -37,8 +37,13 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 WORKDIR /src/l-atelier-des-chercheurs/corpora
 COPY package*.json ./
 RUN npm i -g npm
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN npm install --unsafe-perm=true
 COPY . .
+
+# Cleanup heavy dependencies
+RUN apt-get remove -y make gcc g++ python2.7 git-core && \
+    apt-get autoremove -y
 
 # Import builded client
 COPY --from=build-client /src/l-atelier-des-chercheurs/corpora/public/dist/ /src/l-atelier-des-chercheurs/corpora/public/dist/
