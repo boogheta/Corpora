@@ -52,8 +52,6 @@ RUN mkdir -p /home/node/Documents/corpora \
     && chmod -R g+rw /home/node /src/l-atelier-des-chercheurs
 USER node
 
-VOLUME ["/src/l-atelier-des-chercheurs/corpora"]
-
 VOLUME ["/home/node/Documents/corpora"]
 
 EXPOSE 8080

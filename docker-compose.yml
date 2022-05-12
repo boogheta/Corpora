@@ -1,6 +1,5 @@
 version: "2"
 volumes:
-  corpora-core:
   corpora-data:
 services:
   corpora-node:
@@ -10,5 +9,4 @@ services:
     ports:
       - "${PORT}:8080"
     volumes:
-      - corpora-core:/src/l-atelier-des-chercheurs/corpora
       - corpora-data:/home/node/Documents/corpora
