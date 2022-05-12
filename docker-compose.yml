@@ -8,5 +8,9 @@ services:
     build: .
     ports:
       - "${PORT}:8080"
+    env_file:
+      - .env
+    #environment:
+    #  - ADMIN_PASS=corpora
     volumes:
       - corpora-data:/home/node/Documents/corpora

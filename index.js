@@ -19,6 +19,10 @@ try {
 }
 global.settings = settings;
 
+if (process.env.ADMIN_PASS) {
+  global.settings.adminPass = process.env.ADMIN_PASS;
+}
+
 const router = require('./router');
 
 require('./core/main')({
