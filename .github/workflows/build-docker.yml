@@ -14,6 +14,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       
+      - name: Read package.json
+        id: package-json
+        uses: culshaw/read-package-node-version-actions@v1
+
+      - name: Show version number
+        run: echo "${{ steps.package-json.outputs.version }}"
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -26,17 +33,10 @@ jobs:
         with:
           images: scpomedialab/atelierdeschercheurs-corpora
 
-      - name: Read package.json
-        id: package-json
-        uses: dutscher/read-package-json-endpoint-actions@v1.33.7
-
-      - name: Show version number
-        run: echo "${{ steps.package-json-endpoint.outputs.endpoint }}"
-      
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: scpomedialab/atelierdeschercheurs-corpora:latest,${{ steps.meta.outputs.tags }},${{ steps.package-json.outputs.endpoint }}
+          tags: scpomedialab/atelierdeschercheurs-corpora:latest,scpomedialab/atelierdeschercheurs-corpora:${{ steps.package-json.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
