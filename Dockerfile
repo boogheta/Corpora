@@ -34,15 +34,16 @@ ENV TZ="Europe/Paris"
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Install server dependencies
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 WORKDIR /src/l-atelier-des-chercheurs/corpora
 COPY package*.json ./
-RUN npm i -g npm
-RUN ln -s /usr/bin/python2.7 /usr/bin/python
-RUN npm install --unsafe-perm=true
+RUN npm install -g npm
+RUN npm ci --unsafe-perm=true && npm cache clean --force
 COPY . .
 
 # Cleanup heavy dependencies
-RUN apt-get remove -y make gcc g++ python2.7 git-core && \
+RUN apt-get remove -y make gcc g++ python3 git-core && \
     apt-get autoremove -y
 
 # Import builded client
@@ -66,4 +67,4 @@ HEALTHCHECK --interval=5s \
             --retries=6 \
             CMD curl -fs http://localhost:8080/ || exit 1
 
-CMD npm run debug
+CMD ["node", "--inspect", "."]
