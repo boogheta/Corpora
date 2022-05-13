@@ -23,7 +23,7 @@ RUN npm run build --unsafe-perm=true
 FROM node:16.13.0-slim
 RUN apt-get update && \
     apt-get install -y apt-utils && \
-    apt-get install -y make gcc g++ python2.7 git-core ca-certificates wget file fftw-dev sudo curl libx11-xcb1 libxcomposite1 libxi6 libxext6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libasound2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libdrm2 libdrm-dev libgbm1 libgbm-dev libice6 libsm6 && \
+    apt-get install -y make gcc g++ python3 git-core ca-certificates wget file fftw-dev sudo curl libx11-xcb1 libxcomposite1 libxi6 libxext6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libasound2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libdrm2 libdrm-dev libgbm1 libgbm-dev libice6 libsm6 && \
     update-ca-certificates
 
 # Setup proper time for timezone

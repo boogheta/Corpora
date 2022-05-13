@@ -25,11 +25,18 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: scpomedialab/atelierdeschercheurs-corpora
+
+      - name: Read package.json
+        id: package-json
+        uses: dutscher/read-package-json-endpoint-actions@v1.33.7
+
+      - name: Show version number
+        run: echo "${{ steps.package-json-endpoint.outputs.endpoint }}"
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: scpomedialab/atelierdeschercheurs-corpora:latest,${{ steps.meta.outputs.tags }}
+          tags: scpomedialab/atelierdeschercheurs-corpora:latest,${{ steps.meta.outputs.tags }},${{ steps.package-json.outputs.endpoint }}
           labels: ${{ steps.meta.outputs.labels }}
