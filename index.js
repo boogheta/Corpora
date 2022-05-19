@@ -30,12 +30,12 @@ const environment_vars = {
   }
 };
 for (const env_var in environment_vars) {
-  const env_val = process.env[env_var];
+  let env_val = process.env[env_var];
   if (env_val !== undefined) {
     if (environment_vars[env_var].type === "bool") {
       env_val = (env_val === "true");
     } else if (environment_vars[env_var].type === "int") {
-      env_val = Number(env_val);
+      env_val = +env_val;
     }
     global.settings[environment_vars[env_var].key] = env_val;
   }
