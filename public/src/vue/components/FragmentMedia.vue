@@ -178,7 +178,10 @@
         </div>
       </div>
 
-      <template v-for="adv_prop in adv_props" v-if="$root.state.scpo">
+      <template
+        v-for="adv_prop in adv_props"
+        v-if="show_advanced_data_on_medias"
+      >
         <div
           :key="adv_prop.key"
           class="m_fragmentMedia--infos--caption"
@@ -322,6 +325,7 @@ export default {
     linked_medias: Array,
     context: String,
     can_be_edited: Boolean,
+    show_advanced_data_on_medias: Boolean,
   },
   components: {
     MediaContent,
@@ -681,7 +685,7 @@ export default {
   }
   &:hover {
     svg {
-      stroke: var(--color-blue);
+      stroke: var(--color-eggplant);
       // fill: white;
     }
   }

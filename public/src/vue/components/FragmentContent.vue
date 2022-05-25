@@ -4,7 +4,8 @@
     :class="{
       'is--preview': context === 'preview',
       'was--read': already_read,
-      'is--fullsizepreview': context === 'preview' && show_preview_fullsize,
+      'is--fullsizepreview':
+        context === 'preview' && corpus.full_fragment_previews === true,
     }"
   >
     <div
@@ -24,7 +25,11 @@
           `"
       >
         <div class="m_fragmentContent--content--inner--top">
-          <div class="_meta" @click="show_advanced_meta = !show_advanced_meta">
+          <div
+            class="_meta"
+            v-if="false"
+            @click="show_advanced_meta = !show_advanced_meta"
+          >
             <div v-if="!show_advanced_meta" class="_meta--oneLine">
               <div class="_date">
                 {{
@@ -172,10 +177,10 @@
               context="preview"
               :data-mediatype="preview_media.type"
             />
-            <div
+            <!-- <div
               class="_fragmentPreview--overlay"
               v-if="preview_media.type === 'image'"
-            />
+            /> -->
           </template>
           <template v-else>
             <div class="_fragmentPreview--media ta-ce lowerc">
@@ -197,6 +202,7 @@
                 :can_be_edited="fragment_can_be_edited"
                 :linked_medias="linked_medias"
                 :context="context"
+                :show_advanced_data_on_medias="corpus.advanced_data_on_medias"
                 @removeMedia="(d) => removeMedia(d)"
                 @moveMedia="(d) => moveMedia(d)"
               />
@@ -296,8 +302,6 @@ export default {
     return {
       show_advanced_meta: false,
       show_edit_fragment: false,
-
-      show_preview_fullsize: false,
 
       random_angle: (Math.random() - 0.5) * 4,
       slide_on_hover: 1,
@@ -509,7 +513,7 @@ export default {
   &.is--preview .m_fragmentContent--content {
     --slide_on_hover: 1rem;
     --move_top_for_slide: calc(-1.8 * var(--slide_on_hover));
-    --preview_height: 260px;
+    --preview_height: auto;
 
     height: var(--preview_height);
     overflow: hidden;
@@ -543,7 +547,7 @@ export default {
 
       // background: hsla(48, 71%, 92%, 1);
       // background: black;
-      box-shadow: 0 0 0.5rem 0.75rem var(--color-lightgray);
+      // box-shadow: 0 0 0.5rem 0.75rem var(--color-lightgray);
       background: var(--color-lightgray);
       // box-shadow: inset 0.5rem 0.5rem red;
 
@@ -552,29 +556,12 @@ export default {
 
     .m_fragmentContent--content--inner {
       margin: 0;
-      box-shadow: 0 0 0.5rem 0rem var(--color-lightgray);
+      // box-shadow: 0 0 0.5rem 0rem var(--color-lightgray);
       pointer-events: auto;
       height: var(--preview_height);
       overflow: hidden;
 
       transform-origin: 50% 100px;
-    }
-
-    .m_fragmentContent--content--inner--top {
-      ._title {
-        height: 5.5em;
-        min-height: 0;
-      }
-
-      h2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        font-size: 1.3rem;
-      }
     }
 
     &:hover,
@@ -583,7 +570,7 @@ export default {
         transform: translateY(calc(-1 * var(--slide_on_hover)));
         // transform: translateY(calc(-1 * var(--slide_on_hover)))
         //   rotate(calc(var(--random_angle) * 1deg)) scale(1);
-        color: var(--color-blue);
+        color: var(--color-eggplant);
       }
 
       ._fragmentPreview {
@@ -593,7 +580,7 @@ export default {
 
   &.is--preview.was--read {
     .m_fragmentContent--content--inner--top {
-      color: var(--color-blue);
+      color: var(--color-eggplant);
     }
   }
 
@@ -602,8 +589,8 @@ export default {
     pointer-events: auto;
     padding: calc(var(--spacing) / 2) 0 calc(var(--spacing));
     margin: calc(var(--spacing) * 1) 0;
-    border-top: 1px solid var(--color-blue);
-    // border-bottom: 1px solid var(--color-blue);
+    border-top: 1px solid var(--color-eggplant);
+    // border-bottom: 1px solid var(--color-eggplant);
     background: white;
 
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
@@ -700,7 +687,7 @@ export default {
 
   span {
     position: absolute;
-    background-color: var(--color-black);
+    background-color: var(--color-eggplant);
     color: white;
     padding: calc(var(--spacing) / 4) calc(var(--spacing) / 2);
     border-radius: 0.5em;
@@ -732,10 +719,11 @@ export default {
   // filter: brightness(80%) sepia(100%) hue-rotate(201deg) saturate(1260%);
   position: relative;
   ._fragmentPreview--media {
-    color: var(--color-blue);
+    color: var(--color-eggplant);
 
-    &[data-mediatype="image"] {
-      filter: grayscale(100%) brightness(125%) contrast(100%);
+    &[data-mediatype="image"],
+    &[data-mediatype="document"] {
+      // filter: grayscale(100%) brightness(125%) contrast(100%);
     }
     &[data-mediatype="text"] {
       margin-top: calc(var(--spacing) / -4);
@@ -750,6 +738,10 @@ export default {
   width: calc(100% - var(--spacing) * 2);
   height: 100%;
   margin: calc(var(--spacing) / 2) calc(var(--spacing));
+
+  .m_fragmentContent.is--fullsizepreview & {
+    width: 100%;
+  }
 }
 
 .m_advancedMenu {
@@ -785,8 +777,8 @@ export default {
   margin: calc(var(--spacing) * 1) 0;
   background: white;
   padding: calc(var(--spacing)) calc(var(--spacing));
-  border-top: 1px solid var(--color-blue);
-  border-bottom: 1px solid var(--color-blue);
+  border-top: 1px solid var(--color-eggplant);
+  border-bottom: 1px solid var(--color-eggplant);
 
   ::v-deep .mediaTextContent {
     margin-left: calc(var(--spacing) / -4);
@@ -799,6 +791,9 @@ export default {
   .mediaTextContent {
     font-size: 1em;
   }
+  .m_fragmentMedia--infos {
+    display: none;
+  }
 }
 
 .m_fragmentContent.is--fullsizepreview .m_fragmentContent--content {
@@ -808,19 +803,34 @@ export default {
 
   .m_fragmentContent--content--inner {
     padding: 0;
+    background: rgba(255, 255, 255, 0.15);
   }
   .m_fragmentContent--content--inner--top {
-    position: absolute;
+    // position: absolute;
     top: 0;
-    padding-top: calc(var(--spacing) / 2);
+    // padding-top: calc(var(--spacing) / 2);
 
-    background: linear-gradient(#fff 0%, #fff 50%, transparent);
+    // background: linear-gradient(#fff 0%, #fff 50%, transparent);
+    // background: var(--color-lilas);
+    // color: var(--color-eggplant);
 
     width: 100%;
     z-index: 1;
 
     ._title {
-      height: 2.5em !important;
+      padding: calc(var(--spacing) / 2);
+      margin: 0;
+      min-height: 0;
+      height: 5.5em;
+
+      h2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1rem;
+      }
     }
   }
 

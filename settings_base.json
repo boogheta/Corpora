@@ -72,6 +72,12 @@
         "description_long_en": {
           "type": "string"
         },
+        "advanced_data_on_medias": {
+          "type": "boolean"
+        },
+        "full_fragment_previews": {
+          "type": "boolean"
+        },
         "date_created": {
           "type": "date",
           "default": "current",
@@ -151,6 +157,15 @@
             "type": "string"
           },
           "collection_description": {
+            "type": "string"
+          },
+          "collection_descriptors": {
+            "type": "string"
+          },
+          "collection_cases": {
+            "type": "string"
+          },
+          "collection_video_embed": {
             "type": "string"
           },
           "type": {
