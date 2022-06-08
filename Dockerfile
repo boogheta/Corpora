@@ -30,16 +30,13 @@ RUN apt-get update && \
 RUN apt-get install tzdata -y
 ENV TZ="Europe/Paris"
 
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-
 # Install server dependencies
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 WORKDIR /src/l-atelier-des-chercheurs/corpora
 COPY package*.json ./
 RUN npm install -g npm
-RUN npm ci --unsafe-perm=true && npm cache clean --force
+RUN npm install --unsafe-perm=true && npm cache clean --force
 COPY . .
 
 # Cleanup heavy dependencies
